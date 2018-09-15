@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<c:set value = "${pageContext.request.contextPath }" var="path"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
 <jsp:include page="_meta.jsp" />
+<c:set value="${requestScope.userlist }" var="userlist" />
 <title>用户查询页面</title><!-- 更改相应的标题 -->
 <meta charset="utf-8">
 <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
@@ -33,9 +36,10 @@
 					<option value="2">分类二</option>
 				</select>
 				</span>-->
-				
-				<input type="text" name="" id="" placeholder=" 用户名称" style="width:250px" class="input-text">
+				<form method="post" action="${path}/Userservlet?action=selectOne">
+				<input type="text" name="userName" id="userName" placeholder=" 用户名称" style="width:250px" class="input-text">
 				<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索用户</button>
+				</form>
 			</div>
 			<div class="cl pd-5 bg-1 bk-gray mt-20" style="height: 30px;">
 				<span style="text-align: center;">用户详细信息如下</span>
@@ -50,11 +54,13 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr class="text-c">
-							
-							<td>10001</td>
-							<td>行业动态</td>							
-						</tr>						
+					<!-- foreach 循环 -->	
+					<c:forEach items="${userlist }" var="user">
+						<tr class="text-c">						
+							<td>${user.userName }</td>
+							<td>${user.userIntegral }</td>							
+						</tr>	
+					</c:forEach>					
 					</tbody>
 				</table>
 			</div>

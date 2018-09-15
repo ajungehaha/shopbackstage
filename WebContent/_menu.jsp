@@ -1,9 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<% String path = request.getContextPath(); %>
+
 <title>Insert title here</title>
 </head>
 <body>
@@ -16,7 +19,7 @@
 			<dt><i class="Hui-iconfont">&#xe616;</i> 用户管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a href="user-list.jsp" title="用户管理">用户查询</a></li>
+					<li><a href="<%=path %>/Userservlet?action=selectAll" title="用户管理">用户查询</a></li>
 		</ul>
 	</dd>
 </dl>
@@ -24,7 +27,7 @@
 			<dt><i class="Hui-iconfont">&#xe613;</i> 分类管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a href="class-list.jsp" title="分类管理">分类管理</a></li>
+					<li><a href="<%=path %>/Classservlet?action=selectAll" title="分类管理">分类管理</a></li>
 		</ul>
 	</dd>
 </dl>
@@ -32,9 +35,8 @@
 			<dt><i class="Hui-iconfont">&#xe620;</i> 商品管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a href="product-list.jsp" title="图片管理">图片管理</a></li>
-					<li><a href="product-list.jsp" title="商品查询">商品查询与修改</a></li>
-					<li><a href="product-add.jsp" title="添加商品">添加商品</a></li>
+					<li><a href="<%=path %>/Productservlet?action=productlist" title="商品查询">商品查询与修改</a></li>
+					<li><a href="<%=path %>/Productservlet?action=productadd" title="添加商品">添加商品</a></li>
 					
 		</ul>
 	</dd>
@@ -54,9 +56,9 @@
 			<dt><i class="Hui-iconfont">&#xe62d;</i> 管理员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a href="admin-role.jsp" title="角色管理">角色管理</a></li>
-					<li><a href="admin-permission.jsp" title="权限管理">权限管理</a></li>
-					<li><a href="admin-list.jsp" title="管理员列表">管理员列表</a></li>
+					<li><a href="<%=path %>/Roleservlet?action=selectAll" title="角色管理">角色管理</a></li>
+					<li><a href="<%=path %>/Authorityservlet?action=selectAll" title="权限管理">权限管理</a></li>
+					<li><a href="<%=path %>/Adminservlet?action=selectAll" title="管理员列表">管理员列表</a></li>
 		</ul>
 	</dd>
 </dl>

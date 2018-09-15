@@ -1,11 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+   
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
 <jsp:include page="_meta.jsp" />
-<title>404页面</title><!-- 更改相应的标题 -->
+ <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<% String path = request.getContextPath(); %>
+
+<title>主页</title><!-- 更改相应的标题 -->
 <meta charset="utf-8">
 <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
 <meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
@@ -42,29 +46,14 @@
 				<tbody>
 					<tr class="text-c">
 						<td>总数</td>
-						<td>92</td>
-						<td>9</td>
-						<td>0</td>
-						<td>8</td>
+						<td>${requestScope.orderCount }</td>
+						<td>${requestScope.productCount }</td>
+						<td>${requestScope.userCount }</td>
+						<td>${requestScope.adminCount }</td>
 						
 			</tr>
 					
-					<tr class="text-c">
-						<td>本周</td>
-						<td>2</td>
-						<td>0</td>
-						<td>0</td>
-						<td>0</td>
-						
-			</tr>
-					<tr class="text-c">
-						<td>本月</td>
-						<td>2</td>
-						<td>0</td>
-						<td>0</td>
-						<td>0</td>
-						
-			</tr>
+					
 		</tbody>
 	</table>
 			<table class="table table-border table-bordered table-bg mt-20">

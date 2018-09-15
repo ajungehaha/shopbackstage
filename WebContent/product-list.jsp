@@ -1,10 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<c:set value = "${pageContext.request.contextPath }" var="path"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
 <jsp:include page="_meta.jsp" />
+<c:set value="${sessionScope.classlist}" var="classlist"></c:set>
+<c:set value="${requestScope.productlist}" var="productlist"></c:set>
 <title>商品查询与修改页面</title><!-- 更改相应的标题 -->
 <meta charset="utf-8">
 <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
@@ -18,28 +22,25 @@
 	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>商品管理 <span class="c-gray en">&gt;</span> 商品查询 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 	<div class="Hui-article">
 		<div class="pos-a" style="width:100px;left:0;top:0; bottom:0; height:100%; border-right:1px solid #e5e5e5; background-color:#f5f5f5; font-size: 16px; margin: 0; float: none; padding-left:50px ; font-family: '微软雅黑';">
-			<ul id="treeDemo" class="ztree" >
-				<li>分类</li>
-				<li>分类</li>
-				<li>分类</li>
-				<li>分类</li>
-				<li>分类</li>
-				<li>分类</li>
+			<ul id="treeDemo" class="text-c" >
+				<c:forEach items="${classlist}" var="classs">
+					<li><a href="${path}/Productservlet?action=selectProductAsClass&classID=${classs['classID']}">${classs['className']}</a></li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div style="margin-left:150px;">
 			<div class="pd-20">
 				<div class="text-c"> 
-					  
-					<input type="text" name="" id="" placeholder=" 产品名称" style="width:250px" class="input-text">
+					  <form method = "post" action="${path}/Productservlet?action=selectOne">
+					<input type="text" name="productName" id="" placeholder=" 产品名称" style="width:250px" class="input-text">
 					<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜商品</button>
+					</form>
 				</div>
-				<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="product_add('添加产品','product-add.jsp')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加商品</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
+				<div class="cl pd-5 bg-1 bk-gray mt-20">  <a class="btn btn-primary radius" onclick="product_add('添加产品','${path}/Productservlet?action=productadd')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加商品</a></span>  </div>
 				<div class="mt-20">
 					<table class="table table-border table-bordered table-bg table-hover table-sort">
 						<thead>
 							<tr class="text-c">
-								<th width="40px"><input name="" type="checkbox" value=""></th>
 								<th width="40px">ID</th>
 								<th width="60px">缩略图</th>
 								<th width="100px">商品名称</th>
@@ -54,20 +55,27 @@
 							</tr>
 						</thead>
 						<tbody>
+						<c:forEach items="${productlist}" var="product">
 							<tr class="text-c va-m">
-								<td><input name="" type="checkbox" value=""></td>
-								<td>001</td>
-								<td>001</td>
-								<td>001</td>
-								<td>001</td>
-								<td>001</td>
-								<td><a onClick="product_show('哥本哈根橡木地板','product-show.html','10001')" href="javascript:;"><img width="60" class="product-thumb" src="pic/product/Thumb/6204.jpg"></a></td>
-								<td class="text-l"><a style="text-decoration:none" onClick="product_show('哥本哈根橡木地板','product-show.html','10001')" href="javascript:;"><img title="国内品牌" src="static/h-ui/images/gq/cn.gif"> <b class="text-success">圣象</b> 哥本哈根橡木地板KS8373</a></td>
-								<td class="text-l">原木的外在,功能流露出尊贵典雅的大气韵味。</td>
-								<td><span class="price">356.0</span> 元/平米</td>
-								<td class="td-status"><span class="label label-success radius">已发布</span></td>
-								<td class="td-manage"><a style="text-decoration:none" onClick="product_stop(this,'10001')" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a> <a style="text-decoration:none" class="ml-5" onClick="product_edit('产品编辑','product-add.jsp','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="product_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+								<td>${product.productID }</td>
+								<td><img style="width: 60px;"  src="${product.pictureAdress }"/></td>
+								<td>${product.productName }</td>
+								<td>${product.press }</td>
+								<td><span class="price">${product.productPrice}</span> 元</td>
+								<td>${product.productAdress }</td>
+								<td>${product.productStock }</td>
+								<td>${product.productSales }</td>
+								<td>${product.lessIntegral }</td>
+								<c:if test="${product.productState==1 }">
+								<td class="td-status"><span class="label label-success radius">正在销售</span></td>
+								<td class="td-manage"><a style="text-decoration:none" onClick="product_stop(this,'10001')" href="${path}/Productservlet?action=changeState&productState=0&productID=${product.productID}" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a> <a style="text-decoration:none" class="ml-5" onClick="product_edit('产品编辑','${path}/Productservlet?action=productadd','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="product_del(this,'10001')" href="${path }/Productservlet?action=deleteProduct&productID=${product.productID}" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>							
+								</c:if>
+								<c:if test="${product.productState==0 }">
+								<td class="td-status"><span class="label label-success radius">已下架</span></td>
+								<td class="td-manage"><a style="text-decoration:none" onClick="product_get(this,'10001')" href="${path}/Productservlet?action=changeState&productState=1&productID=${product.productID}" title="上架"><i class="Hui-iconfont">&#xe6de;</i></a> <a style="text-decoration:none" class="ml-5" onClick="product_edit('产品编辑','${path}/Productservlet?action=productadd','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="product_del(this,'10001')" href="${path}/Productservlet?action=deleteProduct&productID=${product.productID}" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+								</c:if>								
 							</tr>
+						</c:forEach>
 						</tbody>
 					</table>
 				</div>
@@ -141,10 +149,18 @@ $('.table-sort').dataTable({
 /*图片-下架*/
 function product_stop(obj,id){
 	layer.confirm('确认要下架吗？',function(index){
-		$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="product_start(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
+		$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="product_get(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
 		$(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已下架</span>');
 		$(obj).remove();
 		layer.msg('已下架!',{icon: 5,time:1000});
+	});
+}
+function product_get(obj,id){
+	layer.confirm('确认要上架吗？',function(index){
+		$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="product_stop(this,id)" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe603;</i></a>');
+		$(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已上架</span>');
+		$(obj).remove();
+		layer.msg('已上架!',{icon: 5,time:1000});
 	});
 }
 

@@ -1,9 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<c:set value = "${pageContext.request.contextPath }" var="path"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
 <html>
 <head>
+<% String path = request.getContextPath(); %>
+<c:set value="${requestScope.classlist }" var="classlist" ></c:set>
 <jsp:include page="_meta.jsp" />
 <title>分类管理页面</title><!-- 更改相应的标题 -->
 <meta charset="utf-8">
@@ -20,9 +23,10 @@
 	<div class="Hui-article">
 		<article class="cl pd-20">
 			<div class="text-c"> 
-				
-				<input type="text" name="" id="" placeholder=" 分类名称" style="width:250px" class="input-text">
+				<form action="${path}/Classservlet?action=selectclass" method="post">
+				<input type="text" name="className" id="className" placeholder=" 分类名称" style="width:250px" class="input-text">
 				<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜分类</button>
+				</form>
 			</div>
 			<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"> <a class="btn btn-primary radius" onclick="class_add('添加分类','class-list-add.jsp')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
 			<div class="mt-20">
@@ -37,13 +41,15 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr class="text-c">
-							
-							<td>001</td>
-							<td>分类名称</td>							
-							<td>这是一些描述</td>
-							<td class="td-manage"><a style="text-decoration:none" class="ml-5" onClick="class_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-						</tr>
+					<c:forEach items="${classlist}" var="classs">
+						<tr class="text-c">								
+								<td>${classs['classID']}</td>
+								<td>${classs['className']}</td>							
+								<td>${classs['classDescribe']}</td>
+								<td class="td-manage"><a style="text-decoration:none" class="ml-5" onClick="class_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+							</tr>
+					</c:forEach>
+						
 					</tbody>
 				</table>
 			</div>

@@ -1,9 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<c:set value = "${pageContext.request.contextPath }" var="path"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
+<c:set value="${requestScope.authoritylist }" var="authoritylist"/>
 <jsp:include page="_meta.jsp" />
 <title>角色管理页面</title><!-- 更改相应的标题 -->
 <meta charset="utf-8">
@@ -13,7 +16,7 @@
 <body>
 <!-- 填写需要的内容 -->
 <article class="cl pd-20">
-	<form action="" method="post" class="form form-horizontal" id="form-admin-role-add">
+	<form action="${path }/Roleservlet?action=addOne" method="post" class="form form-horizontal" id="form-admin-role-add">
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
 			<div class="formControls col-xs-8 col-sm-9">
@@ -23,37 +26,34 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3">备注：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="roleDescribe" name="roleDescribe">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3">网站权限：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<dl class="permission-list">
-					<dt>
-						<label>
-							<input type="checkbox" value="" name="user-Character-0" id="user-Character-0">
-							全选</label>
-					</dt>
+				<dl class="permission-list" name="">
+					
 					<dd>
 						<dl class="cl permission-list2">
 							<dd>
+							<c:forEach items="${authoritylist }" var="authority">
 								<label class="">
-									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-0">
-									订单管理</label>
-								<label class="">
-									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-1">
-									商品管理</label>
-								<label class="">
-									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-2">
-									管理员管理</label>
-								<label class="">
+									<input type="checkbox" value="${authority.authorityID }" onclick="javascript:setvalue(this)" name="authorityID1" id="user-Character-0-0-0" class="authorityID1">
+									${authority.authorityName }</label>
+								</c:forEach>
+								
 									
 							</dd>
 						</dl>
 						
 					</dd>
 				</dl>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input type="hidden" value="" name="authorityID"  id="authorityID" />
 			</div>
 		</div>
 		<div class="row cl">
@@ -71,43 +71,25 @@
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script> 
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script> 
 <script type="text/javascript">
-$(function(){
-	$(".permission-list dt input:checkbox").click(function(){
-		$(this).closest("dl").find("dd input:checkbox").prop("checked",$(this).prop("checked"));
-	});
-	$(".permission-list2 dd input:checkbox").click(function(){
-		var l =$(this).parent().parent().find("input:checked").length;
-		var l2=$(this).parents(".permission-list").find(".permission-list2 dd").find("input:checked").length;
-		if($(this).prop("checked")){
-			$(this).closest("dl").find("dt input:checkbox").prop("checked",true);
-			$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",true);
-		}
-		else{
-			if(l==0){
-				$(this).closest("dl").find("dt input:checkbox").prop("checked",false);
+	function setvalue(obj)
+	{
+		
+		var obj2 = document.getElementById("authorityID");
+		console.log(obj);
+		console.log(obj2);
+		
+		if(obj.checked==true)
+			{
+				obj2.setAttribute("value",obj.getAttribute("value"));
 			}
-			if(l2==0){
-				$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",false);
-			}
-		}
-	});
+			
+	}
 	
-	$("#form-admin-role-add").validate({
-		rules:{
-			roleName:{
-				required:true,
-			},
-		},
-		onkeyup:false,
-		focusCleanup:true,
-		success:"valid",
-		submitHandler:function(form){
-			$(form).ajaxSubmit();
-			var index = parent.layer.getFrameIndex(window.name);
-			parent.layer.close(index);
-		}
-	});
-});
+</script>
+<script type="text/javascript">
+
+
+
 </script>
 <!--/请在上方写此页面业务相关的脚本-->
 </body>

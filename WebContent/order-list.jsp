@@ -1,10 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<c:set value = "${pageContext.request.contextPath }" var="path"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
 <jsp:include page="_meta.jsp" />
+<c:set value="${requestScope.orderlist }" var="orderlist"></c:set>
+<c:set value="${requestScope.productlist }" var="productlist"/>
 <title>订单管理页面</title><!-- 更改相应的标题 -->
 <meta charset="utf-8">
 <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
@@ -19,10 +23,12 @@
 	<div class="Hui-article">
 		<article class="cl pd-20">
 			<div class="text-c"> 
-				<input type="text" class="input-text" style="width:250px" placeholder="输入订单编号" id="" name="">
+			<form action="${path}/Orderservlet?action=selectOrderAsorderID" method="post">
+				<input type="text" class="input-text" style="width:250px" placeholder="输入订单编号" id="orderID" name="orderID">
 				<button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜订单</button>
+				</form>
 			</div>
-			<div class="cl pd-5 bg-1 bk-gray mt-20"><span class="r">共有数据：<strong>88</strong> 条</span> </div>
+			<div class="cl pd-5 bg-1 bk-gray mt-20"> </div>
 			<div class="mt-20">
 				<table class="table table-border table-bordered table-hover table-bg table-sort">
 					<thead>
@@ -33,6 +39,7 @@
 							<th width="60">金额</th>
 							<th width="60">商品数量</th>
 							<th width="80">用户名</th>
+							<th width="80">派送地址</th>
 							<th width="80">下单时间</th>
 							<th width="80">支付时间</th>
 							<th width="80">发货时间</th>
@@ -41,24 +48,77 @@
 						</tr>
 					</thead>
 					<tbody>
+					<c:forEach items="${orderlist }" var="order">
 						<tr class="text-c">
-							<td>1</td>
+							<td>${order.orderID}</td>
+							<c:if test="${order.orderState==0}">
+							<td>未支付</td>
+							</c:if>
+							<c:if test="${order.orderState==1}">
 							<td>未发货</td>
-							<td>333.0</td>
-							<td >5</td>
-							<td>乐视</td>
-							<td>2018-8-20</td>
-							<td>2018-09-01</td>
-							<td>2018-09-01</td>
-							<td>2018-09-01</td>
+							</c:if>
+							<c:if test="${order.orderState==2}">
+							<td>未收货</td>
+							</c:if>
+							<c:if test="${order.orderState==3}">
+							<td>交易成功</td>
+							</c:if>
+							<c:if test="${order.orderState==4}">
+							<td>未支付取消订单</td>
+							</c:if>
+							<c:if test="${order.orderState==5}">
+							<td>退款中</td>
+							</c:if>
+							<c:if test="${order.orderState==6}">
+							<td>退款成功</td>
+							</c:if>
+							<td>${order.orderPrice}</td>
+							<td >${order.orderProductNum }</td>
+							<td>${order.userName}</td>
+							<td>${order.adressName }</td>
+							<td>${order.placeTime}</td>
+							<td>${order.payTime}</td>
+							<td>${order.deliveryTime}</td>
+							<td>${order.accessTime}</td>
 							
-							<td class="td-manage"><button onclick="show_product()">查看详情</button>
-								<button>发货</button>
-								<button>退款</button>
-								<button><a href="order_changeadress.html">修改地址</a></button>
+							<td class="td-manage"><button onclick="javascript:show_product(${order.orderID})">查看详情</button>
+							
+								<c:if test="${order.orderState<2}">
+								<button><a href="${path}/Orderservlet?action=fahuo&orderID=${order.orderID}">发货</a></button>
+								</c:if>
+								<c:if test="${order.orderState>0&&order.orderState<6 }">
+								<button><a href="${path}/Orderservlet?action=tuikuan&orderID=${order.orderID}">退款</a></button>
+								</c:if>
+								<button><a href="order-changAdress.jsp?orderID=${order.orderID }">修改地址</a></button>
 							</td>
 						</tr>
-						
+						<div >
+							<table class="table table-border table-bordered table-hover table-bg table-sort" id="${order.orderID }" style="display: none;">
+								<thead>
+									<tr class="text-c">
+										
+										<th width="200">商品ID</th>
+										<th width="200">商品名称</th>
+										<th width="200">订单价格</th>
+										<th width="200">书号</th>
+										<th width="200">出版社</th>			
+										
+									</tr>
+								</thead>
+								<tbody>
+								<c:forEach items="${productlist }" var="product">
+									<tr class="text-c">
+										<td>${product.productID }</td>
+										<td>${product.productName }</td>
+										<td>${product.productPrice }</td>
+										<td>${product.bookNum }</td>
+										<td>${product.press}</td>
+										
+									</tr>
+								</c:forEach>
+								</tbody>
+							</div>
+					</c:forEach>	
 					</tbody>
 				</table>
 			</div>
@@ -73,29 +133,18 @@
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript">
-$(function(){
-	$('.table-sort').dataTable({
-		"aaSorting": [[ 1, "desc" ]],//默认第几个排序
-		"bStateSave": true,//状态保存
-		"aoColumnDefs": [
-		  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-		  {"orderable":false,"aTargets":[0,2,4]}// 制定列不参与排序
-		]
-	});
-	$('.table-sort tbody').on( 'click', 'tr', function () {
-		if ( $(this).hasClass('selected') ) {
-			$(this).removeClass('selected');
+var count=1;
+function show_product(orderID){
+	if(count%2==1)
+		{
+			document.getElementById(orderID).style.display='block';	
 		}
-		else {
-			table.$('tr.selected').removeClass('selected');
-			$(this).addClass('selected');
-		}
-	});
-});
-/*用户-添加*/
-function member_add(title,url,w,h){
-	layer_show(title,url,w,h);
-}
+	else{
+		document.getElementById(orderID).style.display='none';	
+	}
+	count++;
+} 
+
 /*用户-查看*/
 function member_show(title,url,id,w,h){
 	layer_show(title,url,w,h);
@@ -120,13 +169,7 @@ function member_start(obj,id){
 	});
 }
 
-/*订单-删除*/
-function member_del(obj,id){
-	layer.confirm('确认要删除吗？',function(index){
-		$(obj).parents("tr").remove();
-		layer.msg('已删除!',{icon:1,time:1000});
-	});
-}
+
 </script>
 <!--/请在上方写此页面业务相关的脚本-->
 </body>

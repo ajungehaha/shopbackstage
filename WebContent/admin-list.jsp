@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<c:set value = "${pageContext.request.contextPath }" var="path"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
+<c:set value="${requestScope.adminlist }" var="adminlist" />
 <jsp:include page="_meta.jsp" />
-<title>404页面</title><!-- 更改相应的标题 -->
+<title>管理员列表</title><!-- 更改相应的标题 -->
 <meta charset="utf-8">
 <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
 <meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
@@ -23,54 +26,47 @@
 	<div class="Hui-article">
 		<article class="cl pd-20">
 			<div class="text-c"> 
-				
-				<input type="text" class="input-text" style="width:250px" placeholder="输入管理员名称" id="" name="">
+				<form action="${path}/Adminservlet?action=selectOne" method="post">
+				<input type="text" class="input-text" style="width:250px" placeholder="输入管理员名称" id="adminName" name="adminName">
 				<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜管理员</button>
+				</form>
 			</div>
 			<div class="cl pd-5 bg-1 bk-gray mt-20">
-				<span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加管理员','admin-add.jsp','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a> </span>
-				<span class="r">共有数据：<strong>54</strong> 条</span>
+				<span class="l"> <a href="javascript:;" onclick="admin_add('添加管理员','${path}/Adminservlet?action=addrolelist','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a> </span>
 			</div>
 			<table class="table table-border table-bordered table-bg">
 				<thead>
 					<tr>
-						<th scope="col" colspan="9">员工列表</th>
+						<th scope="col" colspan="9">管理员列表</th>
 					</tr>
 					<tr class="text-c">
-						<th width="25"><input type="checkbox" name="" value=""></th>
-						<th width="40">ID</th>
 						<th width="150">登录名</th>
 						<th width="90">手机</th>
 						<th width="150">邮箱</th>
 						<th>角色</th>
 						<th width="130">加入时间</th>
-						<th width="100">是否已启用</th>
+						<th width="100">状态</th>
 						<th width="100">操作</th>
 					</tr>
 				</thead>
 				<tbody>
+				<c:forEach items="${adminlist }" var="admin">				 
 					<tr class="text-c">
-						<td><input type="checkbox" value="1" name=""></td>
-						<td>1</td>
-						<td>admin</td>
-						<td>13000000000</td>
-						<td>admin@mail.com</td>
-						<td>超级管理员</td>
-						<td>2014-6-11 11:11:42</td>
+						<td>${admin.adminName }</td>
+						<td>${admin.adminIphone }</td>
+						<td>${admin.adminEmail }</td>
+						<td>${admin.adminRole }</td>
+						<td>${admin.adminJoinTime }</td>
+						<c:if test="${admin.adminState==1 }">
 						<td class="td-status"><span class="label label-success radius">已启用</span></td>
-						<td class="td-manage"><a style="text-decoration:none" onClick="admin_stop(this,'10001')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a> <a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','admin-add.jsp','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+						<td class="td-manage"><a style="text-decoration:none" onClick="admin_stop(this,'10001')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a> <a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','admin-add.jsp','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>				
+						</c:if>
+						<c:if test="${admin.adminState==0 }">
+						<td class="td-status"><span class="label label-success radius">已停用</span></td>
+						<td class="td-manage"><a style="text-decoration:none" onClick="admin_start(this,'10001')" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe631;</i></a> <a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','admin-add.jsp','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+						</c:if>
 					</tr>
-					<tr class="text-c">
-						<td><input type="checkbox" value="2" name=""></td>
-						<td>2</td>
-						<td>zhangsan</td>
-						<td>13000000000</td>
-						<td>admin@mail.com</td>
-						<td>栏目编辑</td>
-						<td>2014-6-11 11:11:42</td>
-						<td class="td-status"><span class="label radius">已停用</span></td>
-						<td class="td-manage"><a style="text-decoration:none" onClick="admin_start(this,'10001')" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe615;</i></a> <a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','admin-add.jsp','2','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-					</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</article>
@@ -105,10 +101,7 @@ function admin_del(obj,id){
 		layer.msg('已删除!',{icon:1,time:1000});
 	});
 }
-/*管理员-编辑*/
-function admin_edit(title,url,id,w,h){
-	layer_show(title,url,w,h);
-}
+
 /*管理员-停用*/
 function admin_stop(obj,id){
 	layer.confirm('确认要停用吗？',function(index){

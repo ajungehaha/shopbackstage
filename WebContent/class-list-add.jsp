@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<c:set value = "${pageContext.request.contextPath }" var="path"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
 <jsp:include page="_meta.jsp" />
+<% String path  = request.getContextPath(); %>
 <title>添加分类页面</title><!-- 更改相应的标题 -->
 <meta charset="utf-8">
 <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
@@ -14,18 +17,18 @@
 
 <!-- 填写需要的内容 -->
 <div class="pd-20">
-  <form action="" method="post" class="form form-horizontal" id="form-user-add" >
+  <form action="${path}/Classservlet?action=addclass" method="post" class="form form-horizontal" id="form-user-add" >
     <div class="row cl">
       <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>分类名称：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text" value="" placeholder="" id="user-name" name="product-category-name">
+        <input type="text" class="input-text" value="" placeholder="" id="className" name="className">
       </div>
       <div class="col-5"> </div>
     </div>
     <div class="row cl">
-      <label class="form-label col-xs-4 col-sm-2">备注：</label>
+      <label class="form-label col-xs-4 col-sm-2">简介：</label>
       <div class="formControls col-5">
-        <textarea name="" cols="" rows="" class="textarea"  placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onKeyUp="textarealength(this,100)"></textarea>
+        <textarea name="classDescribe" cols="" rows="" class="textarea"  placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onKeyUp="textarealength(this,100)"></textarea>
         <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
       </div>
       <div class="col-5"> </div>
